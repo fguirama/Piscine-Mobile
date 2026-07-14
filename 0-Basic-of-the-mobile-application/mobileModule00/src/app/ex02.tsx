@@ -30,7 +30,7 @@ export default function App() {
             <View className="grid grid-cols-5">
                 {
                     buttons.map((button) => (
-                        <Pressable key={button} onPress={() => handlePress(button)} className="flex-1 py-2 m-1 rounded-xl bg-white justify-center items-center shadow">
+                        <Pressable key={button} onPress={() => handlePress(button)} className="flex-1 py-2 m-1 rounded-xl bg-white justify-center items-center">
                             <Text className="text-2xl font-bold">{button}</Text>
                         </Pressable>
                     ))
