@@ -1,0 +1,18 @@
+import React, { createContext, useContext, useState } from "react";
+
+const SearchContext = createContext<any>(null);
+
+export function SearchProvider({children}: {children: React.ReactNode}) {
+    const [search, setSearch] = useState("");
+    const [searchDisplay, setSearchDisplay] = useState("");
+
+    return (<SearchContext.Provider
+            value={{search, setSearch, searchDisplay, setSearchDisplay}}>
+            {children}
+    </SearchContext.Provider>);
+
+}
+
+export function useSearch(){
+    return useContext(SearchContext);
+}
