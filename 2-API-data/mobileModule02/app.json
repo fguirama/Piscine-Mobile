@@ -3,7 +3,7 @@
     "name": "mobileModule00",
     "slug": "mobileModule00",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "mobilemodule00",
     "userInterfaceStyle": "automatic",

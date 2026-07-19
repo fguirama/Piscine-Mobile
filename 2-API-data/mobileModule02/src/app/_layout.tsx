@@ -4,10 +4,12 @@ import TopBar from "@/components/TopBar";
 import {SearchProvider} from "@/context/useSearchContext";
 import "@/global.css";
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
+import {WeatherProvider} from "@/context/useWeatherContext";
 
 export default function Layout() {
     return (<SafeAreaProvider>
         <SafeAreaView className="flex-1">
+            <WeatherProvider>
             <SearchProvider>
                 <Tabs screenOptions={{header: () => <TopBar />}}>
                     <Tabs.Screen name="index" options={{
@@ -24,6 +26,7 @@ export default function Layout() {
                     }} />
                 </Tabs>
             </SearchProvider>
+            </WeatherProvider>
         </SafeAreaView>
     </SafeAreaProvider>);
 }
