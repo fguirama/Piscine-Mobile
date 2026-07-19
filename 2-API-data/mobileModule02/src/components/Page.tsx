@@ -1,10 +1,9 @@
 import {useSearch} from "@/context/useSearchContext";
-import {Text, View} from "react-native";
+import {Text, View, ScrollView} from "react-native";
 import {useWeather} from "@/context/useWeatherContext";
 import React from "react";
 import {iWeather} from "@/services/weather.service";
 import {iLocation} from "@/services/geocoding.service";
-import {ScrollView} from "@expo/ui";
 
 export default function Page({children}: {children: (weather: iWeather, WMOCode: Record<number, string>) => React.ReactNode}) {
     const {searchError, error} = useSearch();
