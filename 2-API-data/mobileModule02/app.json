@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
-    "scheme": "mobilemodule00",
+    "scheme": "mobilemodule02",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
