@@ -7,12 +7,12 @@ import {iLocation} from "@/services/geocoding.service";
 import {ScrollView} from "@expo/ui";
 
 export default function Page({children}: {children: (weather: iWeather, WMOCode: Record<number, string>) => React.ReactNode}) {
-    const {searchDisplay, error} = useSearch();
+    const {searchError, error} = useSearch();
     const {weather: selectedData} = useWeather();
 
     const content = () => {
         if (error)
-            return (<Text className="flex-wrap text-red-500 px-12">{searchDisplay}</Text>);
+            return (<Text className="flex-wrap text-red-500 px-12">{searchError}</Text>);
         else if (!selectedData)
             return (<Text className="flex-wrap px-12">{"No location selected"}</Text>);
         return (<ContentSuccess data={selectedData}>{children}</ContentSuccess>);

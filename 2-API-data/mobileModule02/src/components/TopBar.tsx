@@ -3,21 +3,19 @@ import { Ionicons } from "@expo/vector-icons";
 import {useSearch} from "@/context/useSearchContext";
 import * as Location from "expo-location";
 import getGeocoding, {getReverseGeocoding, iLocation, iGeocoding} from "@/services/geocoding.service";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import getWeather from "@/services/weather.service";
 import {useWeather} from "@/context/useWeatherContext";
 
 export default function TopBar() {
-    const {search, setSearch, setSearchError, setError} = useSearch()
-    const {weather, setWeather} = useWeather()
-    const [res, setRes] = useState<iGeocoding[]>([]);
+    const {search, setSearch, setSearchError, setError, searchResult, setSearchResult} = useSearch()
+    const {setWeather} = useWeather()
 
     const makeWeatherRequest = async (latitude: number, longitude: number, location: iLocation) => {
         try {
             const requestRes = await getWeather(latitude, longitude);
             setWeather([requestRes, location]);
             setError(false);
-            setRes([]);
         } catch {
             setSearchError("Error on request weather");
             setError(true);
@@ -48,7 +46,7 @@ export default function TopBar() {
 
     const handleChangeText = async (text: string) => {
         setSearch(text);
-        setWeather(undefined);
+        setError(false);
     }
 
     useEffect(() => {
@@ -62,19 +60,18 @@ export default function TopBar() {
                         setError(true);
                         setSearchError("No results found");
                     }
-                    setRes(requestRes.results ?? []);
+                    setSearchResult(requestRes.results ?? []);
                 } catch {
-                    setRes([]);
+                    setSearchResult([]);
                     setSearchError("Error on request geocoding");
                     setError(true);
                 }
             } else
-                setRes([]);
+                setSearchResult([]);
             setWeather(undefined);
         }
 
-        if (!weather)
-            makeRequest().then(() => {});
+        makeRequest().then(() => {});
     }, [search]);
 
     return (<View className="relative space-y-4 px-4 py-3">
@@ -90,10 +87,17 @@ export default function TopBar() {
         </View>
 
         {
-            res && res.length > 0 &&
+            searchResult && searchResult.length > 0 &&
             <View className="absolute top-full w-full bg-white z-10" style={{backgroundColor: "rgb(242, 242, 242)"}}>
-                {res.map((item, key) => (
-                    <Pressable key={key} className="flex-row border-b border-gray-300 px-2 py-6" onPress={() => makeWeatherRequest(item.latitude, item.longitude, {city: item.name, region: item.admin1, country: item.country})}>
+                {searchResult.map((item: iGeocoding, key: number) => (
+                    <Pressable key={key} className="flex-row border-b border-gray-300 px-2 py-6" onPress={() => {
+                        setSearchResult([]);
+                        makeWeatherRequest(item.latitude, item.longitude, {
+                            city: item.name,
+                            region: item.admin1,
+                            country: item.country
+                        }).then(() => {})
+                    }}>
                         <Text className="flex-1"><Text className="font-bold">{item.name}</Text> {item.admin1}, {item.country}</Text>
                     </Pressable>
                 ))}
