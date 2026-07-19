@@ -3,7 +3,6 @@ import { Ionicons } from "@expo/vector-icons";
 import {useSearch} from "@/context/useSearchContext";
 import * as Location from "expo-location";
 import getGeocoding, {getReverseGeocoding, iLocation, iGeocoding} from "@/services/geocoding.service";
-import {useEffect} from "react";
 import getWeather from "@/services/weather.service";
 import {useWeather} from "@/context/useWeatherContext";
 
@@ -47,32 +46,21 @@ export default function TopBar() {
     const handleChangeText = async (text: string) => {
         setSearch(text);
         setError(false);
-    }
-
-    useEffect(() => {
-        const makeRequest  = async () => {
-            if (search && search.length > 1) {
-                try {
-                    const requestRes = await getGeocoding(search);
-                    if (requestRes.results)
-                        setError(false);
-                    else {
-                        setError(true);
-                        setSearchError("No results found");
-                    }
-                    setSearchResult(requestRes.results ?? []);
-                } catch {
-                    setSearchResult([]);
-                    setSearchError("Error on request geocoding");
-                    setError(true);
-                }
-            } else
-                setSearchResult([]);
-            setWeather(undefined);
+        try {
+            const requestRes = await getGeocoding(text);
+            if (requestRes.results)
+                setError(false);
+            else {
+                setError(true);
+                setSearchError("No results found");
+            }
+            setSearchResult(requestRes.results ?? []);
+        } catch {
+            setSearchResult([]);
+            setSearchError("Error on request geocoding");
+            setError(true);
         }
-
-        makeRequest().then(() => {});
-    }, [search]);
+    }
 
     return (<View className="relative space-y-4 px-4 py-3">
         <View className="flex flex-row gap-3">
