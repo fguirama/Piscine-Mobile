@@ -14,7 +14,7 @@ export default function Page({children}: {children: (weather: iWeather, WMOCode:
         if (error)
             return (<Text className="flex-wrap text-red-500 px-12">{searchDisplay}</Text>);
         else if (!selectedData)
-            return (<Text className="flex-wrap px-12">{searchDisplay ?? "no location selected"}</Text>);
+            return (<Text className="flex-wrap px-12">{"No location selected"}</Text>);
         return (<ContentSuccess data={selectedData}>{children}</ContentSuccess>);
     }
 

@@ -27,7 +27,7 @@ export interface iGeocoding {
     admin4: string
 }
 
-export default async function getGeocoding(search: string): Promise<{results: iGeocoding[] }> {
+export default async function getGeocoding(search: string): Promise<{results?: iGeocoding[] }> {
     const API_URL = `https://geocoding-api.open-meteo.com/v1/search?name=${search}`;
     const response = await fetch(
         API_URL,
