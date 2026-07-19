@@ -25,18 +25,26 @@ export default function TopBar() {
         const {status} = await Location.requestForegroundPermissionsAsync();
 
         if (status === "granted") {
-            const location = await Location.getCurrentPositionAsync({});
-            const latitude = location.coords.latitude;
-            const longitude = location.coords.longitude;
-
             try {
-                const reverseGeocode = await getReverseGeocoding(latitude, longitude);
-                const region = reverseGeocode.address.state || reverseGeocode.address.region || reverseGeocode.address["ISO3166-2-lvl4"];
-                await makeWeatherRequest(latitude, longitude, {city: reverseGeocode.address.city, region: region, country: reverseGeocode.address.country});
+                const location = await Location.getCurrentPositionAsync({});
+                const latitude = location.coords.latitude;
+                const longitude = location.coords.longitude;
+
+                try {
+                    const reverseGeocode = await getReverseGeocoding(latitude, longitude);
+                    const region = reverseGeocode.address.state || reverseGeocode.address.region || reverseGeocode.address["ISO3166-2-lvl4"];
+                    await makeWeatherRequest(latitude, longitude, {city: reverseGeocode.address.city, region: region, country: reverseGeocode.address.country});
+                } catch {
+                    setSearchError("Error on request reverse geolocation");
+                    setError(true);
+                }
             } catch {
-                setSearchError("Error on request reverse geolocation");
+                setSearchError("Location is not available");
                 setError(true);
+                return;
             }
+
+
         } else {
             setSearchError("Geolocation is not available, please enable it in your App settings");
             setError(true);

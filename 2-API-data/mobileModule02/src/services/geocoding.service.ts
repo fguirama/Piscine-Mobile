@@ -59,7 +59,14 @@ interface iReverseGeocoding {
 }
 
 export async function getReverseGeocoding(latitude: number, longitude: number): Promise<iReverseGeocoding> {
-    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`);
+    const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`,
+        {
+            headers: {
+                "User-Agent": "Module02/1",
+            }
+        }
+    );
 
     const data = await response.json().catch(() => null);
     if (!response.ok)
