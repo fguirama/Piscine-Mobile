@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "mobileModule00",
-    "slug": "mobileModule00",
+    "name": "mobileModule01",
+    "slug": "mobileModule01",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.anonymous.mobileModule00"
+      "bundleIdentifier": "com.anonymous.mobileModule01"
     },
     "android": {
       "adaptiveIcon": {
@@ -19,7 +19,7 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.mobileModule00"
+      "package": "com.anonymous.mobileModule01"
     },
     "web": {
       "bundler": "metro",
