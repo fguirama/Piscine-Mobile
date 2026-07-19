@@ -2,29 +2,28 @@ import {View, TextInput, Pressable, Text} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import {useSearch} from "@/context/useSearchContext";
 import * as Location from "expo-location";
-import getGeocoding, {iGeocoding} from "@/services/geocoding.service";
-import {useState} from "react";
+import getGeocoding, {getReverseGeocoding, iLocation, iGeocoding} from "@/services/geocoding.service";
+import {useEffect, useState} from "react";
 import getWeather from "@/services/weather.service";
 import {useWeather} from "@/context/useWeatherContext";
+import {ScrollView} from "@expo/ui";
 
 export default function TopBar() {
     const {search, setSearch, setSearchDisplay, setError} = useSearch()
-    const {setWeather} = useWeather()
+    const {weather, setWeather} = useWeather()
     const [res, setRes] = useState<iGeocoding[]>([]);
 
-    const makeWeatherRequest = async (latitude: number, longitude: number, geocoding?: iGeocoding) => {
+    const makeWeatherRequest = async (latitude: number, longitude: number, location: iLocation) => {
         try {
             const requestRes = await getWeather(latitude, longitude);
-            console.log(requestRes);
             setSearchDisplay(String(requestRes));
-            setWeather([requestRes, geocoding]);
+            setWeather([requestRes, location]);
             setError(false);
             setRes([]);
         } catch {
             setSearchDisplay("Error on request weather location");
             setError(true);
         }
-        setSearch(geocoding?.name);
     }
 
     async function getLocation() {
@@ -34,7 +33,15 @@ export default function TopBar() {
             const location = await Location.getCurrentPositionAsync({});
             const latitude = location.coords.latitude;
             const longitude = location.coords.longitude;
-            await makeWeatherRequest(latitude, longitude);
+
+            try {
+                const reverseGeocode = await getReverseGeocoding(latitude, longitude);
+                const region = reverseGeocode.address.state || reverseGeocode.address.region || reverseGeocode.address["ISO3166-2-lvl4"];
+                await makeWeatherRequest(latitude, longitude, {city: reverseGeocode.address.city, region: region, country: reverseGeocode.address.country});
+            } catch {
+                setSearchDisplay("Reverse geolocation request failed");
+                setError(true);
+            }
         } else {
             setSearchDisplay("Geolocation is not available, please enable it in your App settings");
             setError(true);
@@ -42,21 +49,31 @@ export default function TopBar() {
     }
 
     const handleChangeText = async (text: string) => {
-        if (text) {
-            try {
-                const requestRes = await getGeocoding(text);
-                setRes(requestRes.results);
-                setError(false);
-            } catch {
-                setRes([]);
-                setSearchDisplay("Error on request geocoding");
-                setError(true);
-            }
-        } else
-            setRes([]);
         setSearchDisplay(text);
         setSearch(text);
+        setWeather(undefined);
     }
+
+    useEffect(() => {
+        const makeRequest  = async () => {
+            if (search) {
+                try {
+                    const requestRes = await getGeocoding(search);
+                    setRes(requestRes.results);
+                    setError(false);
+                } catch {
+                    setRes([]);
+                    setSearchDisplay("Error on request geocoding");
+                    setError(true);
+                }
+            } else
+                setRes([]);
+            setWeather(undefined);
+        }
+
+        if (!weather)
+            makeRequest().then(() => {});
+    }, [search]);
 
     return (<View className="space-y-4 px-4 py-3">
         <View className="flex flex-row gap-3">
@@ -72,13 +89,15 @@ export default function TopBar() {
 
         {
             res && res.length > 0 &&
-            <View className="w-full bg-white z-10 overflow-y-auto" style={{backgroundColor: "rgb(242, 242, 242)"}}>
-                {res.map((item, key) => (
-                    <Pressable key={key} className="flex-row border-b border-gray-300 px-2 py-6" onPress={() => makeWeatherRequest(item.latitude, item.longitude, item)}>
-                        <Text className="flex-1"><Text className="font-bold">{item.name}</Text> {item.admin1}, {item.country}</Text>
-                    </Pressable>
-                ))}
-            </View>
+            <ScrollView>
+                <View className="w-full bg-white z-10" style={{backgroundColor: "rgb(242, 242, 242)"}}>
+                    {res.map((item, key) => (
+                        <Pressable key={key} className="flex-row border-b border-gray-300 px-2 py-6" onPress={() => makeWeatherRequest(item.latitude, item.longitude, {city: item.name, region: item.admin1, country: item.country})}>
+                            <Text className="flex-1"><Text className="font-bold">{item.name}</Text> {item.admin1}, {item.country}</Text>
+                        </Pressable>
+                    ))}
+                </View>
+            </ScrollView>
         }
     </View>);
 }
