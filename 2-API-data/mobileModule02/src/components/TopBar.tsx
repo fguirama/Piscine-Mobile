@@ -8,8 +8,8 @@ import getWeather from "@/services/weather.service";
 import {useWeather} from "@/context/useWeatherContext";
 
 export default function TopBar() {
-    const {search, setSearch, setSearchError, setError, searchResult, setSearchResult} = useSearch()
-    const {setWeather} = useWeather()
+    const {search, setSearch, setSearchError, setError, searchResult, setSearchResult} = useSearch();
+    const {setWeather} = useWeather();
 
     const makeWeatherRequest = async (latitude: number, longitude: number, location: iLocation) => {
         try {
@@ -91,12 +91,13 @@ export default function TopBar() {
             <View className="absolute top-full w-full bg-white z-10" style={{backgroundColor: "rgb(242, 242, 242)"}}>
                 {searchResult.map((item: iGeocoding, key: number) => (
                     <Pressable key={key} className="flex-row border-b border-gray-300 px-2 py-6" onPress={() => {
-                        setSearchResult([]);
                         makeWeatherRequest(item.latitude, item.longitude, {
                             city: item.name,
                             region: item.admin1,
                             country: item.country
-                        }).then(() => {})
+                        }).then(() => {
+                            setSearchResult([]);
+                        });
                     }}>
                         <Text className="flex-1"><Text className="font-bold">{item.name}</Text> {item.admin1}, {item.country}</Text>
                     </Pressable>
