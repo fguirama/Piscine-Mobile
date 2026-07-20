@@ -79,8 +79,10 @@ export default function TopBar() {
     return (<View className="space-y-4 px-4 py-3">
         <View className="flex flex-row gap-3">
             <Pressable className="flex-1 flex-row items-center px-3 bg-white rounded-full" onPress={() => {
-                iptRef.current?.focus()
-                handleChangeText(search).then(() => {});
+                if (!searchResult) {
+                    iptRef.current?.focus()
+                    handleChangeText(search).then(() => {});
+                }
             }}>
                 <Ionicons name="search" size={25} color="rgb(0, 122, 255)"/>
                 <TextInput ref={iptRef} value={search} onChangeText={handleChangeText} placeholder="Search location" className="flex-1 px-3 py-2 focus:outline-none"/>
