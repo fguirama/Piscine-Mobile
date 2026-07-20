@@ -77,7 +77,7 @@ export default function TopBar() {
 
     return (<View className="relative space-y-4 px-4 py-3">
         <View className="flex flex-row gap-3">
-            <Pressable className="flex-1 flex-row items-center px-3 bg-gray-300 rounded-full" onPress={() => {
+            <Pressable className="flex-1 flex-row items-center px-3 bg-gray-100 rounded-full" onPress={() => {
                 iptRef.current?.focus()
                 handleChangeText(search).then(() => {});
             }}>
@@ -85,7 +85,7 @@ export default function TopBar() {
                 <TextInput ref={iptRef} value={search} onChangeText={handleChangeText} placeholder="Search location" className="flex-1 px-3 py-2 focus:outline-none"/>
             </Pressable>
 
-            <Pressable onPress={getLocation} className="p-3 rounded-full">
+            <Pressable onPress={getLocation} className="p-3 rounded-full bg-gray-100">
                 <Ionicons name="location" size={25} color="rgb(0, 122, 255)"/>
             </Pressable>
         </View>
