@@ -5,6 +5,7 @@ import React from "react";
 import {iWeather} from "@/services/weather.service";
 import {iLocation} from "@/services/geocoding.service";
 import {Ionicons} from "@expo/vector-icons";
+import {ImageBackground} from "expo-image";
 
 export default function Page({children}: {children: (weather: iWeather, WMOCode: tWMOCode) => React.ReactNode}) {
     const {searchError, error} = useSearch();
@@ -18,9 +19,11 @@ export default function Page({children}: {children: (weather: iWeather, WMOCode:
         return (<ContentSuccess data={selectedData}>{children}</ContentSuccess>);
     }
 
-    return (<View className="flex-1 justify-center items-center mt-6">
-        {content()}
-    </View>);
+    return (<ImageBackground source={require("../../assets/background.jpg")} className="flex-1">
+        <View className="flex-1 w-full justify-center items-center mt-6">
+            {content()}
+        </View>
+    </ImageBackground>);
 }
 
 export type tWMOCode = Record<number, { name: string; icon: string; color: string }>

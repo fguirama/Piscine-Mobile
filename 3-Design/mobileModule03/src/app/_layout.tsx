@@ -8,10 +8,7 @@ import {WeatherProvider} from "@/context/useWeatherContext";
 import {ImageBackground} from "expo-image";
 
 export default function Layout() {
-    return (<ImageBackground
-        source={require("../../assets/background.jpg")}
-        className="flex-1 Z-10"
-    >
+    return (<ImageBackground source={require("../../assets/background-2.jpg")} className="flex-1">
         <SafeAreaProvider>
             <SafeAreaView className="flex-1">
                 <WeatherProvider>
