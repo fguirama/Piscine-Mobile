@@ -61,7 +61,7 @@ export default function TopBar() {
             try {
                 const requestRes = await getGeocoding(text);
                 setError(false);
-                setSearchResult(requestRes.results ?? []);
+                setSearchResult(requestRes.results?.slice(0, 5) ?? []);
             } catch {
                 setSearchResult(undefined);
                 setSearchError("Error on request geocoding");
@@ -77,12 +77,13 @@ export default function TopBar() {
 
     return (<View className="relative space-y-4 px-4 py-3">
         <View className="flex flex-row gap-3">
-            <View className="flex-1 flex-row items-center px-3 bg-gray-300 rounded-full">
-                <Pressable onPress={() => iptRef.current?.focus()}>
-                    <Ionicons name="search" size={25} color="rgb(0, 122, 255)"/>
-                </Pressable>
-                <TextInput ref={iptRef} onFocus={() => handleChangeText(search)} value={search} onChangeText={handleChangeText} placeholder="Search location..." className="flex-1 px-3 py-2 focus:outline-none"/>
-            </View>
+            <Pressable className="flex-1 flex-row items-center px-3 bg-gray-300 rounded-full" onPress={() => {
+                iptRef.current?.focus()
+                handleChangeText(search).then(() => {});
+            }}>
+                <Ionicons name="search" size={25} color="rgb(0, 122, 255)"/>
+                <TextInput ref={iptRef} value={search} onChangeText={handleChangeText} placeholder="Search location" className="flex-1 px-3 py-2 focus:outline-none"/>
+            </Pressable>
 
             <Pressable onPress={getLocation} className="p-3 rounded-full">
                 <Ionicons name="location" size={25} color="rgb(0, 122, 255)"/>
@@ -90,15 +91,15 @@ export default function TopBar() {
         </View>
 
         {
-            searchResult && (<View className="absolute top-[80%] left-0 w-full bg-white z-10 shadow" style={{backgroundColor: "rgb(242, 242, 242)"}}>
+            searchResult && (<View className="absolute top-[80%] left-0 w-full bg-white z-10 " style={{backgroundColor: "rgb(242, 242, 242)", boxShadow: "0px 6px 6px rgba(0,0,0,0.2)"}}>
                 {
                     searchResult.length > 0 ?
                         searchResult.map((item: iGeocoding, key: number) => (
-                            <Pressable key={key} className="flex-row border-b border-gray-300 px-2 py-6" onPress={() => makeWeatherRequest(item.latitude, item.longitude, {city: item.name, region: item.admin1, country: item.country})}>
-                                <Text className="flex-1"><Text className="font-bold">{item.name}</Text> {item.admin1}, {item.country}</Text>
+                            <Pressable key={key} className={"flex-row px-8 py-6 mx-4" + (key === searchResult.length - 1 ? "" : " border-b border-gray-300")} onPress={() => makeWeatherRequest(item.latitude, item.longitude, {city: item.name, region: item.admin1, country: item.country})}>
+                                <Text className="flex-1 text-gray-400"><Ionicons name="business" size={18}/><Text className="ml-4 mr-2 text-base font-bold text-black">{item.name}</Text>{item.admin1}, {item.country}</Text>
                             </Pressable>
                         )) :
-                        <Text className="text-center py-6">No results found.</Text>
+                        <Text className="text-center py-6 text-gray-400 italic">No results found.</Text>
                 }
             </View>)
         }
