@@ -5,6 +5,7 @@ import * as Location from "expo-location";
 import getGeocoding, {getReverseGeocoding, iLocation, iGeocoding} from "@/services/geocoding.service";
 import getWeather from "@/services/weather.service";
 import {useWeather} from "@/context/useWeatherContext";
+import {useEffect} from "react";
 
 export default function TopBar() {
     const {search, setSearch, setSearchError, setError, searchResult, setSearchResult} = useSearch();
@@ -69,6 +70,10 @@ export default function TopBar() {
             setError(true);
         }
     }
+
+    useEffect(() => {
+        getLocation().then(() => {});
+    }, []);
 
     return (<View className="relative space-y-4 px-4 py-3">
         <View className="flex flex-row gap-3">
