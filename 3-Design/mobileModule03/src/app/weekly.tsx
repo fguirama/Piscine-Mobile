@@ -9,7 +9,7 @@ export default function Weekly() {
         {
             (weather: iWeather, WMOCode: tWMOCode) => (<View className="w-full">
                 <ScrollView horizontal={true}>
-                    <View className="flex flex-row gap-2">
+                    <View className="flex flex-row gap-2 px-2">
                         {
                             weather.daily.time.map((d, i) => (
                                 <View key={i} className="items-center bg-white rounded-xl p-3">

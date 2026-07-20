@@ -10,7 +10,7 @@ export default function Today() {
         {
             (weather: iWeather, WMOCode: tWMOCode) => (<View className="w-full">
                 <ScrollView horizontal={true}>
-                    <View className="flex flex-row gap-2">
+                    <View className="flex flex-row gap-2 px-2">
                     {
                         weather.hourly.time.slice(0, 24).map((t, i) => (
                             <View key={i} className="items-center bg-white rounded-xl px-3 py-4">
