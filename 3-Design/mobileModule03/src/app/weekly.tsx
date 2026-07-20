@@ -7,7 +7,7 @@ import {Ionicons} from "@expo/vector-icons";
 export default function Weekly() {
     return (<Page>
         {
-            (weather: iWeather, WMOCode: tWMOCode) => (<View className="">
+            (weather: iWeather, WMOCode: tWMOCode) => (<View className="w-full">
                 <ScrollView horizontal={true}>
                     <View className="flex flex-row gap-2">
                         {

@@ -8,11 +8,11 @@ import Temperature from "@/components/Temperature";
 export default function Today() {
     return (<Page>
         {
-            (weather: iWeather, WMOCode: tWMOCode) => (<View className="flex-1">
+            (weather: iWeather, WMOCode: tWMOCode) => (<View className="w-full">
                 <ScrollView horizontal={true}>
                     <View className="flex flex-row gap-2">
                     {
-                        weather.hourly.time.map((t, i) => (
+                        weather.hourly.time.slice(0, 24).map((t, i) => (
                             <View key={i} className="items-center bg-white rounded-xl px-3 py-4">
                                 <Text>{t.split("T")[1]}</Text>
                                 <Temperature size="text-lg" temp={weather.hourly.temperature_2m[i]} units={weather.hourly_units.temperature_2m}/>
