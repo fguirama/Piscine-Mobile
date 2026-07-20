@@ -1,4 +1,4 @@
-import {View, TextInput, Pressable, Text} from "react-native";
+import {View, TextInput, Pressable, Text, Dimensions} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import {useSearch} from "@/context/useSearchContext";
 import * as Location from "expo-location";
@@ -11,6 +11,7 @@ export default function TopBar() {
     const {search, setSearch, setSearchError, setError, searchResult, setSearchResult} = useSearch();
     const {setWeather} = useWeather();
     const iptRef = useRef<TextInput>(null);
+    const { width, height } = Dimensions.get("window");
 
     const makeWeatherRequest = async (latitude: number, longitude: number, location: iLocation) => {
         setSearchResult(undefined);
@@ -75,9 +76,9 @@ export default function TopBar() {
         getLocation().then(() => {});
     }, []);
 
-    return (<View className="relative space-y-4 px-4 py-3">
+    return (<View className="space-y-4 px-4 py-3">
         <View className="flex flex-row gap-3">
-            <Pressable className="flex-1 flex-row items-center px-3 bg-gray-100 rounded-full" onPress={() => {
+            <Pressable className="flex-1 flex-row items-center px-3 bg-white rounded-full" onPress={() => {
                 iptRef.current?.focus()
                 handleChangeText(search).then(() => {});
             }}>
@@ -85,13 +86,17 @@ export default function TopBar() {
                 <TextInput ref={iptRef} value={search} onChangeText={handleChangeText} placeholder="Search location" className="flex-1 px-3 py-2 focus:outline-none"/>
             </Pressable>
 
-            <Pressable onPress={getLocation} className="p-3 rounded-full bg-gray-100">
+            <Pressable onPress={getLocation} className="p-3 rounded-full bg-white">
                 <Ionicons name="location" size={25} color="rgb(0, 122, 255)"/>
             </Pressable>
         </View>
 
         {
-            searchResult && (<View className="absolute top-[80%] left-0 w-full bg-white z-10 " style={{backgroundColor: "rgb(242, 242, 242)", boxShadow: "0px 6px 6px rgba(0,0,0,0.2)"}}>
+            searchResult && (<Pressable className="absolute inset-0 top-14 bg-black/20" onPress={() => setSearchResult(undefined)} style={{
+                width,
+                height,
+            }}>
+                <View className="relative top-0 w-full bg-white z-10 " style={{backgroundColor: "rgb(242, 242, 242)", boxShadow: "0px 6px 6px rgba(0,0,0,0.2)"}}>
                 {
                     searchResult.length > 0 ?
                         searchResult.map((item: iGeocoding, key: number) => (
@@ -101,7 +106,8 @@ export default function TopBar() {
                         )) :
                         <Text className="text-center py-6 text-gray-400 italic">No results found.</Text>
                 }
-            </View>)
+                </View>
+            </Pressable>)
         }
     </View>);
 }
