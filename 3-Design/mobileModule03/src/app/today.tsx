@@ -16,7 +16,9 @@ export default function Today() {
                             <View key={i} className="items-center bg-white rounded-xl px-3 py-4">
                                 <Text>{t.split("T")[1]}</Text>
                                 <Temperature size="text-lg" temp={weather.hourly.temperature_2m[i]} units={weather.hourly_units.temperature_2m}/>
-                                <Ionicons className="mb-2" name={WMOCode[weather.current.weather_code].icon} color={WMOCode[weather.current.weather_code].color} size={25}/>
+                                <View className="mb-2 mt-1">
+                                    <Ionicons name={WMOCode[weather.hourly.weather_code[i]].icon} color={WMOCode[weather.hourly.weather_code[i]].color} size={25}/>
+                                </View>
                                 <Wind size={13} speed={weather.hourly.wind_speed_10m[i]} units={weather.hourly_units}/>
                             </View>
                         ))

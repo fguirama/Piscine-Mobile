@@ -12,11 +12,13 @@ export default function Weekly() {
                     <View className="flex flex-row gap-2">
                         {
                             weather.daily.time.map((d, i) => (
-                                <View key={i} className="items-center bg-white rounded-xl px-3 py-4">
+                                <View key={i} className="items-center bg-white rounded-xl p-3">
                                     <Text>{d.split('-')[2]}/{d.split('-')[1]}</Text>
+                                    <View className="m-2">
+                                        <Ionicons name={WMOCode[weather.daily.weather_code[i]].icon} color={WMOCode[weather.daily.weather_code[i]].color} size={25}/>
+                                    </View>
                                     <Temperature size="text-sm" temp={weather.daily.temperature_2m_min[i]} units={weather.daily_units.temperature_2m_min} text="min"/>
                                     <Temperature size="text-sm" temp={weather.daily.temperature_2m_max[i]} units={weather.daily_units.temperature_2m_max} text="max" color="orange"/>
-                                    <Ionicons className="mb-2" name={WMOCode[weather.current.weather_code].icon} color={WMOCode[weather.current.weather_code].color} size={25}/>
                                 </View>
                             ))
                         }
