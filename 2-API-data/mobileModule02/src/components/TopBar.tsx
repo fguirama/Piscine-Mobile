@@ -5,11 +5,12 @@ import * as Location from "expo-location";
 import getGeocoding, {getReverseGeocoding, iLocation, iGeocoding} from "@/services/geocoding.service";
 import getWeather from "@/services/weather.service";
 import {useWeather} from "@/context/useWeatherContext";
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 
 export default function TopBar() {
     const {search, setSearch, setSearchError, setError, searchResult, setSearchResult} = useSearch();
     const {setWeather} = useWeather();
+    const iptRef = useRef(null);
 
     const makeWeatherRequest = async (latitude: number, longitude: number, location: iLocation) => {
         try {
@@ -78,8 +79,13 @@ export default function TopBar() {
     return (<View className="relative space-y-4 px-4 py-3">
         <View className="flex flex-row gap-3">
             <View className="flex-1 flex-row items-center px-3 bg-gray-300 rounded-full">
-                <Ionicons name="search" size={25} color="rgb(0, 122, 255)"/>
-                <TextInput value={search} onChangeText={handleChangeText} placeholder="Search location..." className="flex-1 px-3 py-2"/>
+                <Pressable onPress={() => {
+                    iptRef.current?.focus();
+                    handleChangeText(search);
+                }}>
+                    <Ionicons name="search" size={25} color="rgb(0, 122, 255)"/>
+                </Pressable>
+                <TextInput ref={iptRef} value={search} onChangeText={handleChangeText} placeholder="Search location..." className="flex-1 px-3 py-2 focus:outline-none"/>
             </View>
 
             <Pressable onPress={getLocation} className="p-3 rounded-full">
@@ -89,7 +95,7 @@ export default function TopBar() {
 
         {
             searchResult && searchResult.length > 0 &&
-            <View className="absolute top-full w-full bg-white z-10" style={{backgroundColor: "rgb(242, 242, 242)"}}>
+            <View className="absolute top-[80%] w-full bg-white z-10" style={{backgroundColor: "rgb(242, 242, 242)"}}>
                 {searchResult.map((item: iGeocoding, key: number) => (
                     <Pressable key={key} className="flex-row border-b border-gray-300 px-2 py-6" onPress={() => {
                         makeWeatherRequest(item.latitude, item.longitude, {
