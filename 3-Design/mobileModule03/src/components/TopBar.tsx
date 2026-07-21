@@ -111,7 +111,7 @@ export default function TopBar() {
                     searchResult.length > 0 ?
                         searchResult.map((item: iGeocoding, key: number) => (
                             <Pressable key={key} className={"flex-row px-8 py-6 mx-4" + (key === searchResult.length - 1 ? "" : " border-b border-gray-300")} onPress={() => makeWeatherRequest(item.latitude, item.longitude, {city: item.name, region: item.admin1, country: item.country})}>
-                                <Text className="flex-1 text-gray-400"><Ionicons name="business" size={18}/><Text className="ml-4 mr-2 text-base font-bold text-black">{item.name}</Text>{item.admin1}, {item.country}</Text>
+                                <Text className="flex-1 text-gray-400"><Ionicons name="business" size={18}/><Text className="text-base font-bold text-black">    {item.name}  </Text>{item.admin1}, {item.country}</Text>
                             </Pressable>
                         )) :
                         <Text className="text-center py-6 text-gray-400 italic">No results found.</Text>

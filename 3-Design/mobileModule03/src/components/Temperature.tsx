@@ -5,6 +5,6 @@ export default function Temperature({temp, units, size="text-2xl", text, color="
   return (<Text className={"font-bold " + size} style={{color: color}}>
       <Ionicons name="thermometer" size={size === "text-2xl" ? 22 : 16}/>{temp}
       {units}
-      {text && <Text className="pl-1 text-xs font-normal">{text}</Text>}
+      {text && <Text className="text-xs font-normal"> {text}</Text>}
   </Text>);
 }
