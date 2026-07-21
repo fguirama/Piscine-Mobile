@@ -1,9 +1,8 @@
 import Page, {tWMOCode} from "@/components/Page";
 import {iWeather} from "@/services/weather.service";
-import {Text, View, ScrollView} from "react-native";
+import {Platform, Text, View, ScrollView} from "react-native";
 import Temperature from "@/components/Temperature";
 import {Ionicons} from "@expo/vector-icons";
-import {Platform} from "react-native";
 import { CartesianChart, Line } from "victory-native";
 import { useFont } from "@shopify/react-native-skia";
 
