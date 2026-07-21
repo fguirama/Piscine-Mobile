@@ -11,7 +11,7 @@ export default function Weekly() {
     const font = useFont(require("../../assets/Roboto.ttf"), 12);
 
     const Round = ({color, label}: {color: string, label: string}) => {
-        return (<View className="flex flex-row items-center gap-1">
+        return (<View className="flex flex-row items-center gap-1 ml-2">
             <View className="w-3 h-3 rounded-full" style={{backgroundColor: color}}/>
             <Text className="text-xs">{label}</Text>
     </View>);}
@@ -19,9 +19,8 @@ export default function Weekly() {
     return (<Page>
         {
             (weather: iWeather, WMOCode: tWMOCode) => {
-                const data = weather.daily.time.map((day, index) => ({day, min: weather.daily.temperature_2m_min[index], max: weather.daily.temperature_2m_max[index],}));
-                const maxY = Math.max(...data.map(d => d.max));
-                console.log(data);
+                const data = weather.daily.time.map((day, index) => ({day, min: weather.daily.temperature_2m_min[index], max: weather.daily.temperature_2m_max[index]}));
+                const maxY = Math.max(...weather.daily.temperature_2m_max);
 
                 return (<View className="w-full">
                     <View className="bg-white rounded-xl mx-2 my-2 p-2">
@@ -29,13 +28,13 @@ export default function Weekly() {
                         Platform.OS === 'web' ?
                         <Text className="text-center italic text-gray-400">Graphic not available on web</Text> :
                         <View className="h-64 w-[90%] mx-auto my-2">
-                            <CartesianChart data={data} xKey="day" yKeys={["min", "max"]} axisOptions={{font, tickCount: data.length}} domain={{y: [0, maxY + 5]}}>
+                            <CartesianChart data={data} xKey="day" yKeys={["min", "max"]} axisOptions={{font, tickCount: data.length}} domain={{y: [0, maxY + 3]}}>
                                 {({ points }) => (<>
                                     <Line points={points.min} color="#007AFF" strokeWidth={3}/>
                                     <Line points={points.max} color="#FFA500" strokeWidth={3}/>
                                 </>)}
                             </CartesianChart>
-                            <View className="flex flex-row gap-2 px-2 justify-center mt-2">
+                            <View className="flex flex-row justify-center mt-3">
                                 <Round color="#007AFF" label="Temp Min"/>
                                 <Round color="#FFA500" label="Temp Max"/>
                             </View>
@@ -50,6 +49,7 @@ export default function Weekly() {
                                 <View key={i} className="items-center bg-white rounded-xl p-3">
                                     <Text>{d}</Text>
                                     <View className="m-2">
+                                        {/*@ts-ignore*/}
                                         <Ionicons name={WMOCode[weather.daily.weather_code[i]].icon} color={WMOCode[weather.daily.weather_code[i]].color} size={25}/>
                                     </View>
                                     <Temperature size="text-sm" temp={weather.daily.temperature_2m_min[i]} units={weather.daily_units.temperature_2m_min} text="min"/>
