@@ -7,7 +7,7 @@ import { CartesianChart, Line } from "victory-native";
 import { useFont } from "@shopify/react-native-skia";
 
 export default function Weekly() {
-    const font = useFont(require("../../assets/Roboto.ttf"), 12);
+    const font = Platform.OS === 'web' ? null : useFont(require("../../assets/Roboto.ttf"), 12);
 
     const Round = ({color, label}: {color: string, label: string}) => {
         return (<View className="flex flex-row items-center gap-1 ml-2">

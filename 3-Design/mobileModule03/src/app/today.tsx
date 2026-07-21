@@ -8,7 +8,7 @@ import {useFont} from "@shopify/react-native-skia";
 import {CartesianChart, Line} from "victory-native";
 
 export default function Today() {
-    const font = useFont(require("../../assets/Roboto.ttf"), 12);
+    const font = Platform.OS === 'web' ? null : useFont(require("../../assets/Roboto.ttf"), 12);
 
     return (<Page>
         {
