@@ -12,30 +12,30 @@ export default function Weekly() {
 
     const Round = ({color, label}: {color: string, label: string}) => {
         return (<View className="flex flex-row items-center gap-1">
-            <View className={`w-3 h-3 rounded-full bg-[${color}]`}/>
+            <View className="w-3 h-3 rounded-full" style={{backgroundColor: color}}/>
             <Text className="text-xs">{label}</Text>
     </View>);}
 
     return (<Page>
         {
             (weather: iWeather, WMOCode: tWMOCode) => {
-                console.log(weather.daily);
                 const data = weather.daily.time.map((day, index) => ({day, min: weather.daily.temperature_2m_min[index], max: weather.daily.temperature_2m_max[index],}));
                 const maxY = Math.max(...data.map(d => d.max));
+                console.log(data);
 
                 return (<View className="w-full">
-                    <View className="bg-white rounded-lg mx-2 my-2 p-2">
+                    <View className="bg-white rounded-xl mx-2 my-2 p-2">
                     {
                         Platform.OS === 'web' ?
                         <Text className="text-center italic text-gray-400">Graphic not available on web</Text> :
-                        <View className="h-full w-[80%]">
+                        <View className="h-64 w-[90%] mx-auto my-2">
                             <CartesianChart data={data} xKey="day" yKeys={["min", "max"]} axisOptions={{font, tickCount: data.length}} domain={{y: [0, maxY + 5]}}>
                                 {({ points }) => (<>
                                     <Line points={points.min} color="#007AFF" strokeWidth={3}/>
                                     <Line points={points.max} color="#FFA500" strokeWidth={3}/>
                                 </>)}
                             </CartesianChart>
-                            <View className="flex flex-row gap-2 px-2 justify-center mb-2">
+                            <View className="flex flex-row gap-2 px-2 justify-center mt-2">
                                 <Round color="#007AFF" label="Temp Min"/>
                                 <Round color="#FFA500" label="Temp Max"/>
                             </View>
