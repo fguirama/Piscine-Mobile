@@ -15,6 +15,7 @@ export default function TopBar() {
 
     const makeWeatherRequest = async (latitude: number, longitude: number, location: iLocation) => {
         setSearchResult(undefined);
+        iptRef.current?.blur();
         try {
             let requestRes = await getWeather(latitude, longitude);
             for (let i = 0; i < requestRes.daily.time.length; i++)
@@ -84,16 +85,18 @@ export default function TopBar() {
         getLocation().then(() => {});
     }, []);
 
+    const handleClickInput = () => {
+        if (!searchResult) {
+            iptRef.current?.focus()
+            handleChangeText(search).then(() => {});
+        }
+    }
+
     return (<View className="space-y-4 px-4 py-3">
         <View className="flex flex-row gap-3">
-            <Pressable className="flex-1 flex-row items-center px-3 bg-white rounded-full" onPress={() => {
-                if (!searchResult) {
-                    iptRef.current?.focus()
-                    handleChangeText(search).then(() => {});
-                }
-            }}>
+            <Pressable className="flex-1 flex-row items-center px-3 bg-white rounded-full" onPress={handleClickInput}>
                 <Ionicons name="search" size={25} color="rgb(0, 122, 255)"/>
-                <TextInput ref={iptRef} value={search} onChangeText={handleChangeText} placeholder="Search location" className="flex-1 px-3 py-2 focus:outline-none"/>
+                <TextInput onFocus={handleClickInput} ref={iptRef} value={search} onChangeText={handleChangeText} placeholder="Search location" className="flex-1 px-3 py-2 focus:outline-none"/>
             </Pressable>
 
             <Pressable onPress={getLocation} className="p-3 rounded-full bg-white">
