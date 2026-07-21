@@ -23,6 +23,8 @@ export default function TopBar() {
             requestRes.hourly.temperature_2m = requestRes.hourly.temperature_2m.slice(0, 24);
             requestRes.hourly.wind_speed_10m = requestRes.hourly.wind_speed_10m.slice(0, 24);
             requestRes.hourly.weather_code = requestRes.hourly.weather_code.slice(0, 24);
+            for (let i = 0; i < requestRes.hourly.time.length; i++)
+                requestRes.hourly.time[i] = requestRes.hourly.time[i].split("T")[1];
             setWeather([requestRes, location]);
             setError(false);
         } catch {

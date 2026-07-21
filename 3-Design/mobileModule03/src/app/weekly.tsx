@@ -28,7 +28,7 @@ export default function Weekly() {
                         Platform.OS === 'web' ?
                         <Text className="text-center italic text-gray-400">Graphic not available on web</Text> :
                         <View className="h-64 w-[90%] mx-auto my-2">
-                            <CartesianChart data={data} xKey="day" yKeys={["min", "max"]} axisOptions={{font, tickCount: data.length}} domain={{y: [0, maxY + 3]}}>
+                            <CartesianChart data={data} xKey="day" yKeys={["min", "max"]} axisOptions={{font, tickCount: data.length, formatYLabel: (value) => `${value}${weather.hourly_units.temperature_2m}`}} domain={{y: [0, maxY + 3]}}>
                                 {({ points }) => (<>
                                     <Line points={points.min} color="#007AFF" strokeWidth={3}/>
                                     <Line points={points.max} color="#FFA500" strokeWidth={3}/>

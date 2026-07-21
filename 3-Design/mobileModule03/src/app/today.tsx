@@ -22,8 +22,8 @@ export default function Today() {
                         Platform.OS === 'web' ?
                             <Text className="text-center italic text-gray-400">Graphic not available on web</Text> :
                             <View className="h-64 w-[90%] mx-auto my-2">
-                                <CartesianChart data={data} xKey="time" yKeys={["temp"]} axisOptions={{font, tickCount: data.length}} domain={{y: [0, maxY + 3]}}>
-                                    {({ points }) => (<Line points={points.temp} color="#007AFF" strokeWidth={3}/>)}
+                                <CartesianChart data={data} xKey="time" yKeys={["temp"]} axisOptions={{font, tickCount: data.length, formatXLabel: (value) => parseInt(value.split(":")[0], 10) % 4 === 0 ? value : "", formatYLabel: (value) => value % 3 === 0 ? `${value}${weather.hourly_units.temperature_2m}` : ""}} domain={{y: [0, maxY + 3]}}>
+                                    {({ points }) => (<Line points={points.temp} color="#FFA500" strokeWidth={3}/>)}
                                 </CartesianChart>
                             </View>
                     }
@@ -33,7 +33,7 @@ export default function Today() {
                     {
                         weather.hourly.time.map((t, i) => (
                             <View key={i} className="items-center bg-white rounded-xl px-3 py-4">
-                                <Text>{t.split("T")[1]}</Text>
+                                <Text>{t}</Text>
                                 <Temperature size="text-lg" temp={weather.hourly.temperature_2m[i]} units={weather.hourly_units.temperature_2m}/>
                                 <View className="mb-2 mt-1">
                                     {/*@ts-ignore*/}
