@@ -52,14 +52,14 @@ export default function TopBar() {
                     setError(true);
                 }
             } catch {
-                setSearchError("Location is not available");
+                setSearchError("Location is not available, please enable it");
                 setError(true);
                 return;
             }
 
 
         } else {
-            setSearchError("Geolocation is not available, please enable it in your App settings");
+            setSearchError("Geolocation access is denied, please enable it in your settings");
             setError(true);
         }
     }
