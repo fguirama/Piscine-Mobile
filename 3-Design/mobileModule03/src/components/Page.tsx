@@ -12,10 +12,11 @@ export default function Page({children}: {children: (weather: iWeather, WMOCode:
     const {weather: selectedData} = useWeather();
 
     const content = () => {
+        const classname = "bg-white px-3 py-4 rounded-2xl flex-wrap text-red-500 px-12 italic";
         if (error)
-            return (<Text className="flex-wrap text-red-500 px-12">{searchError}</Text>);
+            return (<Text className={"text-red-500 " + classname}>{searchError}</Text>);
         else if (!selectedData)
-            return (<Text className="flex-wrap px-12">{"No location selected"}</Text>);
+            return (<Text className={classname}>"No location selected"</Text>);
         return (<ContentSuccess data={selectedData}>{children}</ContentSuccess>);
     }
 
