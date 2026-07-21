@@ -16,7 +16,9 @@ export default function TopBar() {
     const makeWeatherRequest = async (latitude: number, longitude: number, location: iLocation) => {
         setSearchResult(undefined);
         try {
-            const requestRes = await getWeather(latitude, longitude);
+            let requestRes = await getWeather(latitude, longitude);
+            for (let i = 0; i < requestRes.daily.time.length; i++)
+                requestRes.daily.time[i] = `${requestRes.daily.time[i].split('-')[2]}/${requestRes.daily.time[i].split('-')[1]}`;
             setWeather([requestRes, location]);
             setError(false);
         } catch {
