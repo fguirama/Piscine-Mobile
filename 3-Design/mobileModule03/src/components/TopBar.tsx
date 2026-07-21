@@ -19,6 +19,10 @@ export default function TopBar() {
             let requestRes = await getWeather(latitude, longitude);
             for (let i = 0; i < requestRes.daily.time.length; i++)
                 requestRes.daily.time[i] = `${requestRes.daily.time[i].split('-')[2]}/${requestRes.daily.time[i].split('-')[1]}`;
+            requestRes.hourly.time = requestRes.hourly.time.slice(0, 24);
+            requestRes.hourly.temperature_2m = requestRes.hourly.temperature_2m.slice(0, 24);
+            requestRes.hourly.wind_speed_10m = requestRes.hourly.wind_speed_10m.slice(0, 24);
+            requestRes.hourly.weather_code = requestRes.hourly.weather_code.slice(0, 24);
             setWeather([requestRes, location]);
             setError(false);
         } catch {

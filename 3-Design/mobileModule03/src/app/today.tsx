@@ -31,7 +31,7 @@ export default function Today() {
             <ScrollView horizontal={true}>
                 <View className="flex flex-row gap-2 px-2">
                     {
-                        weather.hourly.time.slice(0, 24).map((t, i) => (
+                        weather.hourly.time.map((t, i) => (
                             <View key={i} className="items-center bg-white rounded-xl px-3 py-4">
                                 <Text>{t.split("T")[1]}</Text>
                                 <Temperature size="text-lg" temp={weather.hourly.temperature_2m[i]} units={weather.hourly_units.temperature_2m}/>
