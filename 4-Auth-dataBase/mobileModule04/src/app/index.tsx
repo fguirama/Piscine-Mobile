@@ -1,10 +1,18 @@
-import { Pressable, Text, View } from "react-native";
+import { Redirect } from "expo-router";
+import { ActivityIndicator, View } from "react-native";
+import {useAuth} from "@/providers/AuthProvider";
 
-export default function HomeScreen() {
-    return (<View className="flex-1 items-center justify-center gap-3">
-        <Text className="text-xl rounded-lg bg-green-500 px-5 py-3">A simple text</Text>
-        <Pressable className="rounded-full bg-white px-5 py-3">
-            <Text className="text-green-500" onPress={() => console.log("Button pressed")}>Click me</Text>
-        </Pressable>
-    </View>);
+export default function Index() {
+    const {loading, isAuthenticated} = useAuth();
+
+    if (loading) {
+        return (<View className="flex-1 items-center justify-center bg-white">
+            <ActivityIndicator size="large" />
+        </View>);
+    }
+
+    if (isAuthenticated)
+        return <Redirect href="/profile" />;
+
+    return <Redirect href="/login" />;
 }

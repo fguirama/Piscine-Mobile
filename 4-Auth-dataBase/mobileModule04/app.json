@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "mobileModule04",
-    "slug": "mobileModule04",
+    "name": "diaryapp",
+    "slug": "diaryapp",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
-    "scheme": "mobilemodule04",
+    "scheme": "diaryapp",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.anonymous.mobileModule04"
+      "bundleIdentifier": "com.anonymous.diaryapp"
     },
     "android": {
       "adaptiveIcon": {
