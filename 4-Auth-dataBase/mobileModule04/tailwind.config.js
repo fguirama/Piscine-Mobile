@@ -1,8 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/app/**/*.{js,jsx,ts,tsx}",
-  ],
+  darkMode: 'class',
+  content: ['./src/**/*.{js,ts,tsx}', './src/**/**/*.{js,ts,tsx}', './src/**/**/**/*.{js,ts,tsx}'],
+
+  presets: [require('nativewind/preset')],
   theme: {
     extend: {
       colors: {
@@ -11,4 +12,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
+};

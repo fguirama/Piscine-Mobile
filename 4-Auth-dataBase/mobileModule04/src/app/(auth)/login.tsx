@@ -15,7 +15,7 @@ type tProvider = "google" | "github";
 export default function Login() {
     const {isAuthenticated, loading} = useAuth();
     const redirectTo = makeRedirectUri({ native: 'diaryapp://' })
-    const [errorMsg, setErrorMsg] = useState<string>("test message d'erreur");
+    const [errorMsg, setErrorMsg] = useState<string>();
 
     const signIn = async (provider: tProvider) => {
         const {data, error} = await supabase.auth.signInWithOAuth({provider, options: {redirectTo, skipBrowserRedirect: true}});
@@ -56,7 +56,7 @@ export default function Login() {
         <Text className="mb-16 text-5xl font-bold text-gray-900">📖 Diary App</Text>
         <Provider provider="google" signIn={signIn}/>
         <Provider provider="github" signIn={signIn}/>
-        {errorMsg && <Text className="text-lg text-center 22text-red-500">{errorMsg}</Text>}
+        {errorMsg && <Text className="text-lg text-center text-red-500 italic">{errorMsg}</Text>}
     </View>);
 }
 
