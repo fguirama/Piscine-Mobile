@@ -26,15 +26,12 @@ export default function Login() {
         }
 
         const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo)
-        console.log("RES result", result);
+
         if (result.type === 'success') {
             const url = new URL(result.url)
             const params = new URLSearchParams(url.hash.substring(1))
             const access_token = params.get('access_token')
             const refresh_token = params.get('refresh_token')
-
-            console.log('access_token:', access_token)
-            console.log('refresh_token:', refresh_token)
 
             if (access_token && refresh_token) {
                 await supabase.auth.setSession({access_token, refresh_token})
@@ -51,7 +48,6 @@ export default function Login() {
     if (isAuthenticated)
         return <Redirect href="/profile"/>;
 
-    console.log("Login PAGE");
     return (<View className="flex-1 justify-center px-8 gap-8">
         <Text className="mb-8 text-5xl font-bold text-gray-900">📖 Diary App</Text>
         <Provider provider="google" signIn={signIn}/>

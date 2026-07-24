@@ -19,7 +19,6 @@ export default function ProfileScreen() {
 
     useEffect(() => {
         const makeRequest = async () => {
-            console.log("MAKE request");
             if (user)
                 await getEntries(user.id);
         }
@@ -32,7 +31,6 @@ export default function ProfileScreen() {
     if (!user)
         return <Redirect href="/login" />;
 
-    console.log("PROFILE PAGE");
     return (<>
         <ViewEntryModal onClose={() => setShowEntryModal(undefined)} entry={showEntryModal}/>
         <CreateEntryModal visible={showCreateEntryModal}

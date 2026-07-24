@@ -5,7 +5,6 @@ import Loading from "@/component/Loading";
 export default function Index() {
     const {loading, isAuthenticated} = useAuth();
 
-    console.log("page index.tsx", isAuthenticated);
     if (loading)
         return (<Loading/>);
 

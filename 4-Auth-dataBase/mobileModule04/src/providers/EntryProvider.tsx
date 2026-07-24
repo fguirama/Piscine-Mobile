@@ -20,7 +20,6 @@ export function EntryProvider({children}: {children: ReactNode}) {
     const getEntries = async (userId: string) => {
         const { data, error } = await supabase.from("diary_entries").select("*").eq("user_id", userId).order("created_at", { ascending: false });
 
-        console.log("getEntries", data, error);
         if (error) {
             setErrorMsg(error.name);
             return;
@@ -38,7 +37,6 @@ export function EntryProvider({children}: {children: ReactNode}) {
         }
         setErrorMsg("");
         setEntries((prev) => [...prev, data]);
-        console.log("DATA POST", data);
     };
 
     const deleteEntry = async (entryId: number) => {
@@ -48,7 +46,6 @@ export function EntryProvider({children}: {children: ReactNode}) {
             return;
         }
         setErrorMsg("");
-        console.log("DATA DELETE", data);
         setEntries((prev) => prev.filter(e => e.id !== entryId));
     }
 

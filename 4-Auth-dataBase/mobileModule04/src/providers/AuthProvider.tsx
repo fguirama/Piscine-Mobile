@@ -18,11 +18,6 @@ export function AuthProvider({children}: {children: ReactNode}) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // const { data: { session } } = await supabase.auth.getSession()
-        // console.log('Current session:', session)
-        // if (session)
-        //     router.replace('/profile') todo check
-
         const loadSession = async () => {
             const {data: { session }} = await supabase.auth.getSession();
 
