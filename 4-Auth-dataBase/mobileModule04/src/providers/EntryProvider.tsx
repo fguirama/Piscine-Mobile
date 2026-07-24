@@ -1,0 +1,67 @@
+import {createContext, useContext, useState, ReactNode,} from "react";
+import { supabase } from "@/lib/supabase";
+import {iDiaryEntry} from "@/types/diary";
+import {User} from "@supabase/supabase-js";
+
+type EntryContextType = {
+    entries: iDiaryEntry[];
+    getEntries: (userId: string) => Promise<void>;
+    createEntry: (user: User, title: string, feeling: string, content: string) => Promise<void>;
+    deleteEntry: (entryId: number) => Promise<void>;
+    errorMsg: string
+};
+
+const EntryContext = createContext<EntryContextType | undefined>(undefined);
+
+export function EntryProvider({children}: {children: ReactNode}) {
+    const [entries, setEntries] = useState<iDiaryEntry[]>([]);
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const getEntries = async (userId: string) => {
+        const { data, error } = await supabase.from("diary_entries").select("*").eq("user_id", userId).order("created_at", { ascending: false });
+
+        console.log("getEntries", data, error);
+        if (error) {
+            setErrorMsg(error.name);
+            return;
+        }
+        setErrorMsg("");
+        setEntries(data);
+    };
+
+    const createEntry = async (user: User, title: string, feeling: string, content: string) => {
+        const {data, error} = await supabase.from("diary_entries").insert({user_id: user.id, email: user.email, title, feeling, content}).select().single();
+
+        if (error) {
+            setErrorMsg(error.name);
+            return;
+        }
+        setErrorMsg("");
+        setEntries((prev) => [...prev, data]);
+        console.log("DATA POST", data);
+    };
+
+    const deleteEntry = async (entryId: number) => {
+        const {data, error} = await supabase.from("diary_entries").delete().eq("id", entryId);
+        if (error) {
+            setErrorMsg(error.name);
+            return;
+        }
+        setErrorMsg("");
+        console.log("DATA DELETE", data);
+        setEntries((prev) => prev.filter(e => e.id !== entryId));
+    }
+
+    return (<EntryContext.Provider value={{entries, getEntries, createEntry, deleteEntry, errorMsg}}>
+        {children}
+    </EntryContext.Provider>);
+}
+
+export function useEntry() {
+    const context = useContext(EntryContext);
+
+    if (!context)
+        throw new Error("useEntry must be used inside an EntryProvider");
+
+    return context;
+}
