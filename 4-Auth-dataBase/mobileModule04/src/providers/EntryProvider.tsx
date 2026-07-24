@@ -8,7 +8,8 @@ type EntryContextType = {
     getEntries: (userId: string) => Promise<void>;
     createEntry: (user: User, title: string, feeling: string, content: string) => Promise<void>;
     deleteEntry: (entryId: number) => Promise<void>;
-    errorMsg: string
+    errorMsg: string;
+    clearEntries: () => void;
 };
 
 const EntryContext = createContext<EntryContextType | undefined>(undefined);
@@ -40,7 +41,7 @@ export function EntryProvider({children}: {children: ReactNode}) {
     };
 
     const deleteEntry = async (entryId: number) => {
-        const {data, error} = await supabase.from("diary_entries").delete().eq("id", entryId);
+        const {error} = await supabase.from("diary_entries").delete().eq("id", entryId);
         if (error) {
             setErrorMsg(error.name);
             return;
@@ -49,7 +50,11 @@ export function EntryProvider({children}: {children: ReactNode}) {
         setEntries((prev) => prev.filter(e => e.id !== entryId));
     }
 
-    return (<EntryContext.Provider value={{entries, getEntries, createEntry, deleteEntry, errorMsg}}>
+    const clearEntries = () => {
+        setEntries([]);
+    }
+
+    return (<EntryContext.Provider value={{entries, getEntries, createEntry, deleteEntry, errorMsg, clearEntries}}>
         {children}
     </EntryContext.Provider>);
 }
