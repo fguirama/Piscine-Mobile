@@ -18,7 +18,7 @@ export default function Login() {
     const [errorMsg, setErrorMsg] = useState<string>();
 
     const signIn = async (provider: tProvider) => {
-        const {data, error} = await supabase.auth.signInWithOAuth({provider, options: {redirectTo, skipBrowserRedirect: true}});
+        const {data, error} = await supabase.auth.signInWithOAuth({provider, options: {redirectTo, skipBrowserRedirect: true, queryParams: {prompt: 'select_account'}}});
 
         if (error) {
             setErrorMsg(error.message);
