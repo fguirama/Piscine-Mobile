@@ -4,30 +4,55 @@ import {iDiaryEntry} from "@/types/diary";
 import {User} from "@supabase/supabase-js";
 
 type EntryContextType = {
-    entry: iDiaryEntry[];
-    CreateEntry: (user: User, title: string, feeling: string, content: string) => Promise<void>;
-    DeleteEntry: (entryId: number) => Promise<void>;
+    entries: iDiaryEntry[];
+    getEntries: (userId: string) => Promise<void>;
+    createEntry: (user: User, title: string, feeling: string, content: string) => Promise<void>;
+    deleteEntry: (entryId: number) => Promise<void>;
+    errorMsg: string
 };
 
 const EntryContext = createContext<EntryContextType | undefined>(undefined);
 
 export function EntryProvider({children}: {children: ReactNode}) {
-    const [entry, setEntry] = useState<iDiaryEntry[]>([]);
+    const [entries, setEntries] = useState<iDiaryEntry[]>([]);
+    const [errorMsg, setErrorMsg] = useState("");
 
-    const CreateEntry = async (user: User, title: string, feeling: string, content: string) => {
-        const res = await supabase.from("diary_entries").insert({user_id: user.id, email: user.email, title, feeling, content});
-        console.log(res);
-        const newEntry: iDiaryEntry = {id: 6, user_id: user.id, user_email: user.email, title, feeling, content, entry_date: "test", created_at: "test"};
-        setEntry((prev) => [...prev, newEntry]);
+    const getEntries = async (userId: string) => {
+        const { data, error } = await supabase.from("diary_entries").select("*").eq("user_id", userId).order("created_at", { ascending: false });
+
+        console.log("getEntries", data, error);
+        if (error) {
+            setErrorMsg(error.name);
+            return;
+        }
+        setErrorMsg("");
+        setEntries(data);
+    };
+
+    const createEntry = async (user: User, title: string, feeling: string, content: string) => {
+        const {data, error} = await supabase.from("diary_entries").insert({user_id: user.id, email: user.email, title, feeling, content}).select().single();
+
+        if (error) {
+            setErrorMsg(error.name);
+            return;
+        }
+        setErrorMsg("");
+        setEntries((prev) => [...prev, data]);
+        console.log("DATA POST", data);
+    };
+
+    const deleteEntry = async (entryId: number) => {
+        const {data, error} = await supabase.from("diary_entries").delete().eq("id", entryId);
+        if (error) {
+            setErrorMsg(error.name);
+            return;
+        }
+        setErrorMsg("");
+        console.log("DATA DELETE", data);
+        setEntries((prev) => prev.filter(e => e.id !== entryId));
     }
 
-    const DeleteEntry = async (entryId: number) => {
-        const res = await supabase.from("diary_entries").delete().eq("id", entryId);
-        console.log(res);
-        setEntry((prev) => prev.filter(e => e.id !== entryId));
-    }
-
-    return (<EntryContext.Provider value={{entry, CreateEntry, DeleteEntry}}>
+    return (<EntryContext.Provider value={{entries, getEntries, createEntry, deleteEntry, errorMsg}}>
         {children}
     </EntryContext.Provider>);
 }

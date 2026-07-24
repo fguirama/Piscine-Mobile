@@ -1,16 +1,16 @@
 import {Redirect, router} from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import {makeRedirectUri} from "expo-auth-session";
-import {Pressable, Text, View} from "react-native";
-import {FontAwesome} from "@expo/vector-icons";
+import {Text, View} from "react-native";
 
 import {supabase} from "@/lib/supabase";
 import {useAuth} from "@/providers/AuthProvider";
 import {useState} from "react";
 import Loading from "@/component/Loading";
+import Button from "@/component/Button";
+import {tProvider} from "@/types/diary";
 
 WebBrowser.maybeCompleteAuthSession();
-type tProvider = "google" | "github";
 
 export default function Login() {
     const {isAuthenticated, loading} = useAuth();
@@ -52,8 +52,8 @@ export default function Login() {
         return <Redirect href="/profile"/>;
 
     console.log("Login PAGE");
-    return (<View className="flex-1 justify-center px-8">
-        <Text className="mb-16 text-5xl font-bold text-gray-900">📖 Diary App</Text>
+    return (<View className="flex-1 justify-center px-8 gap-8">
+        <Text className="mb-8 text-5xl font-bold text-gray-900">📖 Diary App</Text>
         <Provider provider="google" signIn={signIn}/>
         <Provider provider="github" signIn={signIn}/>
         {errorMsg && <Text className="text-lg text-center text-red-500 italic">{errorMsg}</Text>}
@@ -61,9 +61,5 @@ export default function Login() {
 }
 
 function Provider({provider, signIn}: {provider: tProvider, signIn: (p: tProvider) => Promise<void>})  {
-    return (<Pressable onPress={() => signIn(provider)}
-                       className="mb-5 flex-row items-center justify-center rounded-xl bg-black py-4">
-        <FontAwesome name={provider} size={22} color="white"/>
-        <Text className="ml-3 text-lg font-semibold text-white">Continue with {provider[0].toUpperCase()}{provider.slice(1)}</Text>
-    </Pressable>);
+    return (<Button icon={provider} onPress={() => signIn(provider)}>Continue with {provider[0].toUpperCase()}{provider.slice(1)}</Button>);
 }
