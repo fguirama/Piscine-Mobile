@@ -1,14 +1,38 @@
-import {View} from "react-native";
-import {Redirect} from "expo-router";
+import {useEntry} from "@/providers/EntryProvider";
+import {Calendar} from "react-native-calendars";
+import {useState} from "react";
+import {Pressable, View} from "react-native";
+import dayjs from "dayjs";
+import Entries from "@/component/Entries";
+import ViewEntryModal from "@/component/ViewEntry";
+import {iDiaryEntry} from "@/types/diary";
+import {Ionicons} from "@expo/vector-icons";
+import CreateEntryModal from "@/component/CreateEntry";
 import {useAuth} from "@/providers/AuthProvider";
-import Button from "@/component/Button";
+import {Redirect} from "expo-router";
 
-export default function Page() {
-    const {user, signOut} = useAuth();
+export default function DiaryScreen() {
+    const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
+    const {user} = useAuth();
+    const {entries, deleteEntry, createEntry} = useEntry();
+    const filteredEntries = entries.filter((entry) => entry.created_at.split("T")[0] === selectedDate);
+    const [showEntryModal, setShowEntryModal] = useState<iDiaryEntry>();
+    const [showCreateEntryModal, setShowCreateEntryModal] = useState(false);
 
     if (!user)
         return <Redirect href="/login" />;
-    return (<View className="flex-1 px-8 py-4">
-        <Button icon="log-out-outline" onPress={signOut}>Logout</Button>
-    </View>)
+
+    return (<View className="flex-1 bg-white px-6 py-4 gap-4">
+        <ViewEntryModal onClose={() => setShowEntryModal(undefined)} entry={showEntryModal} deleteEntry={deleteEntry}/>
+        <CreateEntryModal visible={showCreateEntryModal}
+                          onClose={() => setShowCreateEntryModal(false)}
+                          onSave={(title, feeling, content) => {
+                              createEntry(user, title, feeling, content).then(() => {});
+                          }}/>
+        <Calendar maxDate={dayjs().format("YYYY-MM-DD")} current={selectedDate} onDayPress={(day) => setSelectedDate(day.dateString)} markedDates={{[selectedDate]: {selected: true}}}/>
+        <Entries entries={filteredEntries} setShowEntryModal={setShowEntryModal}/>
+        <Pressable onPress={() => setShowCreateEntryModal(true)} className="absolute bottom-8 right-6 w-16 h-16 rounded-full bg-black justify-center items-center shadow-xl">
+            <Ionicons name="add" size={30} color="white"/>
+        </Pressable>
+    </View>);
 }

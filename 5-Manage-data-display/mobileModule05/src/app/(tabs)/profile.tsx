@@ -1,20 +1,20 @@
-import {Modal, Pressable, ScrollView, Text, View} from "react-native";
+import {Pressable, Text, View} from "react-native";
 import {useAuth} from "@/providers/AuthProvider";
 import {Ionicons} from "@expo/vector-icons";
-import Button from "@/component/Button";
 import {useEntry} from "@/providers/EntryProvider";
-import {iDiaryEntry} from "@/types/diary";
+import {FEELINGS, iDiaryEntry} from "@/types/diary";
 import {Redirect} from "expo-router";
 import {useEffect, useState} from "react";
 import CreateEntryModal from "@/component/CreateEntry";
 import Feeling from "@/component/Feeling";
 import ViewEntryModal from "@/component/ViewEntry";
+import Entries from "@/component/Entries";
+import {round} from "mathjs";
 
 export default function ProfileScreen() {
     const [showCreateEntryModal, setShowCreateEntryModal] = useState(false);
     const [showEntryModal, setShowEntryModal] = useState<iDiaryEntry>();
-    const [deleteEntryId, setDeleteEntryId] = useState<number>();
-    const {user} = useAuth();
+    const {user, signOut} = useAuth();
     const {entries, getEntries, createEntry, deleteEntry} = useEntry();
 
     useEffect(() => {
@@ -31,65 +31,40 @@ export default function ProfileScreen() {
     if (!user)
         return <Redirect href="/login" />;
 
-    return (<>
-        <ViewEntryModal onClose={() => setShowEntryModal(undefined)} entry={showEntryModal}/>
+    return (<View className="flex-1 bg-neutral-50 px-6 gap-4 py-4">
+        <ViewEntryModal onClose={() => setShowEntryModal(undefined)} entry={showEntryModal} deleteEntry={deleteEntry}/>
         <CreateEntryModal visible={showCreateEntryModal}
                           onClose={() => setShowCreateEntryModal(false)}
                           onSave={(title, feeling, content) => {
                               createEntry(user, title, feeling, content).then(() => {});
                           }}/>
-        <DeleteConfirmationModal deleteEntryId={deleteEntryId} onClose={() => setDeleteEntryId(undefined)} deleteEntry={deleteEntry}/>
-        <View className="flex-1 px-8 py-4">
-            <ScrollView>
-                <View className="flex-1 space-y-4">
-                    {entries.map(e => <PreviewDiaryEntry key={e.id} entry={e} setDeleteEntryId={setDeleteEntryId} setShowEntryModal={setShowEntryModal}/>)}
-                </View>
-            </ScrollView>
-        <Button icon="add" onPress={() => setShowCreateEntryModal(true)}>Add entry</Button>
-        </View>
-        </>
-    );
-}
-
-function PreviewDiaryEntry({entry, setDeleteEntryId, setShowEntryModal}: { entry: iDiaryEntry, setDeleteEntryId: (v?: number) => void, setShowEntryModal: (e: iDiaryEntry) => void}) {
-    const [year, , day] = entry.created_at.split("T")[0].split("-");
-    const month = new Date(entry.created_at).toLocaleString("en-US", {month: "short"});
-
-    return (<Pressable className="bg-white rounded-2xl p-5 mb-4 flex-row items-center shadow-sm border border-gray-100 text-black" onPress={() => setShowEntryModal(entry)}>
-        <View className="items-center justify-center bg-indigo-50 rounded-xl px-4 py-3 mr-4">
-            <Text className="text-2xl font-bold text-[#007AFF]">{day}</Text>
-            <Text className="text-xs uppercase tracking-wide text-gray-500">{month}</Text>
-            <Text className="text-xs text-gray-400">{year}</Text>
+        <View className="flex-row justify-between items-center">
+            <View>
+                <Text className="text-neutral-500 text-base">Welcome</Text>
+                <Text className="text-3xl font-bold text-black">{user?.username || "Florian"}</Text>
+            </View>
+            <Pressable className="bg-red-500 px-4 py-3 rounded-xl" onPress={signOut}><Text className="text-white font-semibold">Logout</Text></Pressable>
         </View>
 
-        <View className="flex-1">
-            <Text className="text-3xl font-semibold" numberOfLines={1}>{entry.title}</Text>
-            <Feeling entry={entry}/>
-        </View>
+        <View className="bg-white rounded-3xl p-4 shadow-sm">
+            <Text className="text-xl font-bold mb-2">Feelings <Text className="text-gray-500">({entries.length} entr{entries.length > 1 ? "ies" : "y"})</Text></Text>
+            {FEELINGS.map((f)=> {
+                const percent = entries.length === 0 ? 0 : round(entries.filter((e) => e.feeling === f.value).length / entries.length * 100);
 
-        <Pressable className="ml-4 p-2" onPress={() => setDeleteEntryId(entry.id)}>
-            <Ionicons name="trash-outline" size={22} color="#EF4444"/>
+                return (<View key={f.label} className="mb-2">
+                    <View className="flex-row justify-between items-center mb-2">
+                        <Feeling feeling={f}/>
+                        <Text>{percent}%</Text>
+                    </View>
+                    <View className="h-2 rounded-full bg-gray-200">
+                        <View className="h-2 rounded-full bg-blue-500" style={{width: `${percent}%`}}/>
+                    </View>
+                </View>)
+            })}
+        </View>
+        <Entries entries={entries} setShowEntryModal={setShowEntryModal}/>
+        <Pressable onPress={() => setShowCreateEntryModal(true)} className="absolute bottom-8 right-6 w-16 h-16 rounded-full bg-black justify-center items-center shadow-xl">
+            <Ionicons name="add" size={30} color="white"/>
         </Pressable>
-    </Pressable>);
-}
-
-function DeleteConfirmationModal({deleteEntryId, onClose, deleteEntry}: {deleteEntryId?: number, onClose: () => void, deleteEntry: (eId: number) => void}) {
-    return (<Modal visible={deleteEntryId !== undefined} animationType="fade" transparent onRequestClose={onClose}>
-        <Pressable className="flex-1 justify-center items-center bg-black/50" onPress={onClose}>
-            <Pressable className="bg-white rounded-2xl p-6 w-80" onPress={(e) => e.stopPropagation()}>
-                <Text className="text-3xl text-black font-bold mb-2">Delete entry?</Text>
-
-                <View className="flex-row">
-                    <Pressable className="flex-1 py-2" onPress={() => {
-                        if (deleteEntryId)
-                            deleteEntry(deleteEntryId);
-                        onClose();
-                    }}>
-                        <Text className="text-red-500 text-center font-semibold">Delete</Text>
-                    </Pressable>
-                    <Pressable className="flex-1 py-2" onPress={() => onClose()}><Text className="text-gray-500 text-center">Cancel</Text></Pressable>
-                </View>
-            </Pressable>
-        </Pressable>
-    </Modal>);
+    </View>);
 }

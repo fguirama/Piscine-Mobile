@@ -34,10 +34,10 @@ export default function CreateEntryModal({visible, onClose, onSave}: {visible: b
             contentError = false;
         if (titleError || contentError)
             return;
-        onSave(titleT, feeling, contentT);
         setTitle("");
         setFeeling("neutral");
         setContent("");
+        onSave(titleT, feeling, contentT);
         onClose();
     };
 
@@ -61,10 +61,9 @@ export default function CreateEntryModal({visible, onClose, onSave}: {visible: b
                         const selected = feeling === item.value;
 
                         return (<Pressable key={item.value} onPress={() => setFeeling(item.value)}
-                                           className={`px-4 py-2 rounded-full border ${
-                                               selected ? "bg-black border-black" : "bg-gray-100 border-gray-200"
-                                           }`}>
-                                <Text className={selected ? "text-white font-medium" : "text-gray-700"}>{item.label}</Text>
+                                           style={{backgroundColor: selected ? item.bg : "#f3f4f6", borderColor: selected ? item.fg : "#e5e7eb"}}
+                                           className="px-4 py-2 rounded-full border">
+                                <Text style={{color: selected ? item.fg : "#374151"}} className={selected ? "font-medium" : ""}>{item.label}</Text>
                             </Pressable>
                         );
                     })}
