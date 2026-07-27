@@ -8,7 +8,7 @@ export default function Layout() {
             tabBarIcon: ({ color, size }) => (<Ionicons name="person-outline" size={size} color={color} />)
         }}/>
         <Tabs.Screen name="calendar" options={{
-            title: "Calendrier",
+            title: "Calendar",
             tabBarIcon: ({ color, size }) => (<Ionicons name="calendar-outline" size={size} color={color}/>)
         }}/>
     </Tabs>);
