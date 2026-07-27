@@ -1,6 +1,6 @@
 import {Pressable, Text, View} from "react-native";
 import {useAuth} from "@/providers/AuthProvider";
-import {Ionicons} from "@expo/vector-icons";
+import {Ionicons, MaterialIcons} from "@expo/vector-icons";
 import {useEntry} from "@/providers/EntryProvider";
 import {FEELINGS, iDiaryEntry} from "@/types/diary";
 import {Redirect} from "expo-router";
@@ -43,7 +43,10 @@ export default function ProfileScreen() {
                 <Text className="text-neutral-500 text-base">Welcome</Text>
                 <Text className="text-3xl font-bold text-black">{user?.user_metadata.name ?? user?.user_metadata.preferred_username}</Text>
             </View>
-            <Pressable className="bg-red-500 px-4 py-3 rounded-xl" onPress={signOut}><Text className="text-white font-semibold">Logout</Text></Pressable>
+            <Pressable className="bg-red-500 px-4 py-3 rounded-xl flex flex-row items-center gap-2" onPress={signOut}>
+                <Text className="text-white font-semibold">Logout</Text>
+                <MaterialIcons name="exit-to-app" size={16} color="white" />
+            </Pressable>
         </View>
 
         <View className="bg-white rounded-3xl p-4 shadow-sm">
