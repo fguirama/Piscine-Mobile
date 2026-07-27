@@ -41,9 +41,7 @@ export default function Login() {
                     setErrorMsg("Error when try to get access_token and refresh_token");
             } else
                 setErrorMsg("Error on openAuthSessionAsync()");
-        } catch {
-            setErrorMsg("Error on login with oauth");
-        }
+        } catch { }
     }
 
     if (loading)
