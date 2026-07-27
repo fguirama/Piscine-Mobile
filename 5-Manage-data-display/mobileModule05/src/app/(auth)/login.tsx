@@ -18,28 +18,32 @@ export default function Login() {
     const [errorMsg, setErrorMsg] = useState<string>();
 
     const signIn = async (provider: tProvider) => {
-        const {data, error} = await supabase.auth.signInWithOAuth({provider, options: {redirectTo, skipBrowserRedirect: true, queryParams: {prompt: 'select_account'}}});
+        try {
+            const {data, error} = await supabase.auth.signInWithOAuth({provider, options: {redirectTo, skipBrowserRedirect: true, queryParams: {prompt: 'select_account'}}});
 
-        if (error) {
-            setErrorMsg(error.message);
-            return ;
-        }
+            if (error) {
+                setErrorMsg(error.message);
+                return ;
+            }
 
-        const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo)
+            const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo)
 
-        if (result.type === 'success') {
-            const url = new URL(result.url)
-            const params = new URLSearchParams(url.hash.substring(1))
-            const access_token = params.get('access_token')
-            const refresh_token = params.get('refresh_token')
+            if (result.type === 'success') {
+                const url = new URL(result.url)
+                const params = new URLSearchParams(url.hash.substring(1))
+                const access_token = params.get('access_token')
+                const refresh_token = params.get('refresh_token')
 
-            if (access_token && refresh_token) {
-                await supabase.auth.setSession({access_token, refresh_token})
-                router.replace('/profile')
+                if (access_token && refresh_token) {
+                    await supabase.auth.setSession({access_token, refresh_token})
+                    router.replace('/profile')
+                } else
+                    setErrorMsg("Error when try to get access_token and refresh_token");
             } else
-                setErrorMsg("Error when try to get access_token and refresh_token");
-        } else
-            setErrorMsg("Error on openAuthSessionAsync()");
+                setErrorMsg("Error on openAuthSessionAsync()");
+        } catch {
+            setErrorMsg("Error on login with oauth");
+        }
     }
 
     if (loading)
