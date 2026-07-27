@@ -41,7 +41,7 @@ export default function ProfileScreen() {
         <View className="flex-row justify-between items-center">
             <View>
                 <Text className="text-neutral-500 text-base">Welcome</Text>
-                <Text className="text-3xl font-bold text-black">{user?.username || "Florian"}</Text>
+                <Text className="text-3xl font-bold text-black">{user?.user_metadata.name ?? user?.user_metadata.preferred_username}</Text>
             </View>
             <Pressable className="bg-red-500 px-4 py-3 rounded-xl" onPress={signOut}><Text className="text-white font-semibold">Logout</Text></Pressable>
         </View>
