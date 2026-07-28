@@ -11,7 +11,7 @@ import ViewEntryModal from "@/component/ViewEntry";
 import Entries from "@/component/Entries";
 import {round} from "mathjs";
 
-export default function ProfileScreen() {
+export default function Profile() {
     const [showCreateEntryModal, setShowCreateEntryModal] = useState(false);
     const [showEntryModal, setShowEntryModal] = useState<iDiaryEntry>();
     const {user, signOut} = useAuth();

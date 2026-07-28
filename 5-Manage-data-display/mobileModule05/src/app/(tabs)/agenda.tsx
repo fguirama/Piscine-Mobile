@@ -11,13 +11,24 @@ import CreateEntryModal from "@/component/CreateEntry";
 import {useAuth} from "@/providers/AuthProvider";
 import {Redirect} from "expo-router";
 
-export default function DiaryScreen() {
+export default function Agenda() {
     const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
     const {user} = useAuth();
     const {entries, deleteEntry, createEntry} = useEntry();
-    const filteredEntries = entries.filter((entry) => entry.created_at.split("T")[0] === selectedDate);
+    const filteredEntries = entries.filter((entry) => entry.created_at.split("T")[0] === selectedDate).sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
     const [showEntryModal, setShowEntryModal] = useState<iDiaryEntry>();
     const [showCreateEntryModal, setShowCreateEntryModal] = useState(false);
+    const blue = "#3b82f6";
+    const markedDates: Record<string, {dots?: {key: string, color: string}[], selected?: boolean}> = {
+        [selectedDate]: {selected: true}
+    };
+
+    entries.forEach(entry => {
+        const d = entry.created_at.split("T")[0];
+
+        if (markedDates[d] === undefined)
+            markedDates[d] = {dots: [{key: "entry", color: "gray"}]};
+    })
 
     if (!user)
         return <Redirect href="/login" />;
@@ -29,7 +40,7 @@ export default function DiaryScreen() {
                           onSave={(title, feeling, content) => {
                               createEntry(user, title, feeling, content).then(() => {});
                           }}/>
-        <Calendar maxDate={dayjs().format("YYYY-MM-DD")} current={selectedDate} onDayPress={(day) => setSelectedDate(day.dateString)} markedDates={{[selectedDate]: {selected: true}}}/>
+        <Calendar theme={{selectedDayBackgroundColor: blue, todayTextColor: blue, arrowColor: blue}} markingType="multi-dot" markedDates={markedDates} maxDate={dayjs().format("YYYY-MM-DD")} current={selectedDate} onDayPress={(day) => setSelectedDate(day.dateString)}/>
         <Entries entries={filteredEntries} setShowEntryModal={setShowEntryModal}/>
         <Pressable onPress={() => setShowCreateEntryModal(true)} className="absolute bottom-8 right-6 w-16 h-16 rounded-full bg-black justify-center items-center shadow-xl">
             <Ionicons name="add" size={30} color="white"/>
