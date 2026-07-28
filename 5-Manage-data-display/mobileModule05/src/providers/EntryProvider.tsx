@@ -37,7 +37,7 @@ export function EntryProvider({children}: {children: ReactNode}) {
             return;
         }
         setErrorMsg("");
-        setEntries((prev) => [...prev, data]);
+        setEntries((prev) => [data, ...prev]);
     };
 
     const deleteEntry = async (entryId: number) => {
