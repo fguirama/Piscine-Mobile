@@ -102,11 +102,11 @@ Master advanced data management and display techniques:
 
 #### Module 5 Screenshots:
 
-<img src="./.img/5-home.png" alt="Home Screen" width="300"/>
-<img src="./.img/5-agenda.png" alt="Agenda View" width="300"/>
-<img src="./.img/5-new-entry.png" alt="New Entry Form" width="300"/>
-<img src="./.img/5-see-entry.png" alt="Entry Details" width="300"/>
-<img src="./.img/5-profile.png" alt="Profile Screen" width="300"/>
+![Home Screen](./.img/5-home.png)
+![Agenda View](./.img/5-agenda.png)
+![New Entry Form](./.img/5-new-entry.png)
+![Entry Details](./.img/5-see-entry.png)
+![Profile Screen](./.img/5-profile.png)
 
 ## Prerequisites
 
