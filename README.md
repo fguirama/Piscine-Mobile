@@ -2,6 +2,8 @@
 
 A comprehensive mobile application development course covering React Native fundamentals through advanced features like authentication, data management, and real-time updates.
 
+![Gif video](./.git-medias/3-video.gif)
+
 ## Overview
 
 Piscine Mobile is a progressive learning project that covers the entire lifecycle of mobile application development using React Native and Expo. Starting from basic fundamentals, the course progresses through API integration, UI design, authentication, and advanced data management patterns.
@@ -30,7 +32,7 @@ Piscine-Mobile/
 │   └── mobileModule04/          # Authentication & database integration
 ├── 5-Manage-data-display/
 │   └── mobileModule05/          # Data management and display (Agenda app)
-└── .img/                        # Screenshots and media assets
+└── .git-medias/                        # Screenshots and media assets
 ```
 
 ## Modules
@@ -73,12 +75,11 @@ Build beautiful user interfaces with advanced design patterns:
 
 #### Module 3 Screenshots:
 
-![Gif video](./.img/3-video.gif)
-![Today Weather View](./.img/3-today.png)
-![Weekly Forecast](./.img/3-weekly.png)
-![Currently Weather](./.img/3-currently.png)
-![Search Functionality](./.img/3-search.png)
-![Location Request](./.img/3-ask-location.png)
+![Today Weather View](./.git-medias/3-today.png)
+![Weekly Forecast](./.git-medias/3-weekly.png)
+![Currently Weather](./.git-medias/3-currently.png)
+![Search Functionality](./.git-medias/3-search.png)
+![Location Request](./.git-medias/3-ask-location.png)
 
 ### Module 4: Authentication & Database
 **Folder:** `4-Auth-dataBase/mobileModule04`
@@ -102,11 +103,11 @@ Master advanced data management and display techniques:
 
 #### Module 5 Screenshots:
 
-![Home Screen](./.img/5-home.png)
-![Agenda View](./.img/5-agenda.png)
-![New Entry Form](./.img/5-new-entry.png)
-![Entry Details](./.img/5-see-entry.png)
-![Profile Screen](./.img/5-profile.png)
+![Home Screen](./.git-medias/5-home.png)
+![Agenda View](./.git-medias/5-agenda.png)
+![New Entry Form](./.git-medias/5-new-entry.png)
+![Entry Details](./.git-medias/5-see-entry.png)
+![Profile Screen](./.git-medias/5-profile.png)
 
 ## Prerequisites
 
