@@ -73,11 +73,12 @@ Build beautiful user interfaces with advanced design patterns:
 
 #### Module 3 Screenshots:
 
-<img src="./.img/3-today.png" alt="Today Weather View" width="300"/>
-<img src="./.img/3-weekly.png" alt="Weekly Forecast" width="300"/>
-<img src="./.img/3-currently.png" alt="Currently Weather" width="300"/>
-<img src="./.img/3-search.png" alt="Search Functionality" width="300"/>
-<img src="./.img/3-ask-location.png" alt="Location Request" width="300"/>
+![Gif video](./.img/3-video.gif)
+![Today Weather View](./.img/3-today.png)
+![Weekly Forecast](./.img/3-weekly.png)
+![Currently Weather](./.img/3-currently.png)
+![Search Functionality](./.img/3-search.png)
+![Location Request](./.img/3-ask-location.png)
 
 ### Module 4: Authentication & Database
 **Folder:** `4-Auth-dataBase/mobileModule04`
