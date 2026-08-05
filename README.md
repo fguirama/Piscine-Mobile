@@ -73,6 +73,7 @@ Build beautiful user interfaces with advanced design patterns:
 
 #### Module 3 Screenshots:
 
+<video src="./.img/3-video.mp4" controls="controls" width="600"></video>
 <img src="./.img/3-today.png" alt="Today Weather View" width="300"/>
 <img src="./.img/3-weekly.png" alt="Weekly Forecast" width="300"/>
 <img src="./.img/3-currently.png" alt="Currently Weather" width="300"/>
